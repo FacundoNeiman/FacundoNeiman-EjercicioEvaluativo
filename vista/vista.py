@@ -10,14 +10,23 @@ conexion = Conexion("base_datos/mi_bd.db")
 def menu():
   while True:
     print("Seleccione una opción:")
+    print("")
+    print("Cine: ")
     print("1. Agregar un cine")
     print("2. Modificar cine")
     print("3. Eliminar cine")
     print("4. Listar cines")
+    print("")
+    print("Pelicula: ")
     print("5. Agregar película")
     print("6. Modificar película")
     print("7. Eliminar película")
     print("8. Listar películas")
+    print("")
+    print("Programacion: ")
+    print("9. Ver programación del cine")
+    print("10. Agregar película a programación")
+    print("")
     print("0. Salir")
     opcion = int(input())
 
@@ -48,6 +57,12 @@ def menu():
 
     elif opcion == 8:
       listarPeliculas()
+
+    elif opcion == 9:
+      listarProgramacion()
+
+    elif opcion == 10:
+      agregarPeliculaProgramacion()
 
     else:
       print("Comando inválido. Intente nuevamente ")
@@ -129,3 +144,30 @@ def eliminarPelicula():
 def listarPeliculas():
   print("Peliculas: ")
   conexion.listarPeliculas()
+
+
+def listarProgramacion():
+  listarCines()
+  id = int(
+      input("Ingrese el id del cine del cual quiere ver la programación: "))
+  cine = conexion.getCine(id)
+  print("")
+  cine.mostrar_programacion()
+  print("")
+
+
+def agregarPeliculaProgramacion():
+  listarCines()
+  id = int(
+      input(
+          "Ingrese el id del cine al cual quiere agregar una pelicula a su programación: "
+      ))
+  cine = conexion.getCine(id)
+  print("")
+  listarPeliculas()
+  id = int(input("Ingrese el id de la película a agregar "))
+  pelicula = conexion.getPelicula(id)
+  conexion.agregarProgramacion(cine.get_id(), pelicula.get_id())
+  print(
+      f"Película añadida a la programación del {cine.get_nombre()} correctamente "
+  )

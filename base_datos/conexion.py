@@ -26,6 +26,12 @@ class Conexion:
     direccion TEXT
     )''')
 
+    self.cursor.execute('''CREATE TABLE IF NOT EXISTS cine_x_pelicula (
+    id_cine INTEGER,
+    id_pelicula INTEGER,
+    PRIMARY KEY (id_cine, id_pelicula)
+    )''')
+
     self.conexion.commit()
 
   def agregarPelicula(self, pelicula):
@@ -124,6 +130,32 @@ class Conexion:
     if cine:
       cine = cine[0]
       aux = Cine(cine[1], cine[2], cine[0])
+      aux = self.getProgramacion(aux)
       return aux
     else:
       return None
+
+  def getProgramacion(self, cine):
+    self.cursor.execute('''SELECT * from cine_x_pelicula WHERE id_cine = ?''',
+                        (cine.get_id(), ))
+    programacion = self.cursor.fetchall()
+    for p in programacion:
+      pelicula = self.getPelicula(p[1])
+      cine.agregarPeliculaProgramacion(pelicula)
+
+    return cine
+
+  def listarProgramacion(self, id):
+    self.cursor.execute('''SELECT * from cine_x_pelicula WHERE id_cine=?''',
+                        (id, ))
+    listado = self.cursor.fetchall()
+    for x in listado:
+      p = getPelicula(x[1])
+      print(p.mostrar_info())
+
+  def agregarProgramacion(self, id_cine, id_pelicula):
+    self.cursor.execute(
+        '''INSERT INTO     
+    cine_x_pelicula(id_cine,id_pelicula)       VALUES       (?,?)''',
+        (id_cine, id_pelicula))
+    self.conexion.commit()
