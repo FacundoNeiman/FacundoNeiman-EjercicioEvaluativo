@@ -84,7 +84,7 @@ def modificarCine():
   print(f"Datos del cine - {id}:")
   print(aux.mostrar_info())
   cine = Cine(input("Ingrese el nombre del cine "),
-              input("Ingrese la direcció n"), id)
+              input("Ingrese la dirección"), id)
   conexion.modificarCine(cine)
   print("Cine modificado correctamente ")
 
